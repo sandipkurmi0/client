@@ -1,13 +1,34 @@
 import { FC } from "react";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { retrieveExpense, deleteExpense } from "../service/expense";
+import {
+  retrieveExpense,
+  deleteExpense,
+  serchExpense,
+} from "../service/expense";
 import { Expense } from "../interface";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ExpenseIndex: FC = () => {
   const [expenses, setExpenses] = useState<Expense[] | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
+
+  const searchHandler = async () => {
+    try {
+      if (searchText === "") {
+        retriveHandle();
+      }
+
+      const response = await serchExpense(searchText);
+      if (response?.status === 200) {
+        const { data } = response?.data;
+        setExpenses(data);
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 
   useEffect(() => {
     retriveHandle();
@@ -22,10 +43,6 @@ const ExpenseIndex: FC = () => {
       console.warn(error);
     }
   };
-
-  if (expenses === null) {
-    return <div className="flex justify-center py-80">Loading...</div>;
-  }
 
   const deleteHandle = async (id: string) => {
     try {
@@ -51,6 +68,10 @@ const ExpenseIndex: FC = () => {
     }
   };
 
+  if (expenses === null) {
+    return <div className="flex justify-center py-80">Loading...</div>;
+  }
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -73,12 +94,40 @@ const ExpenseIndex: FC = () => {
                 ></path>
               </svg>
             </div>
-            <input
-              type="text"
-              id="table-search"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search htmlFor items"
-            />
+            <div className="flex justify-around gap-2 ">
+              <input
+                type="text"
+                id="table-search"
+                onChange={(e) => setSearchText(e.target.value)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search htmlFor items"
+              />
+              <span
+                onClick={() => searchHandler()}
+                className="relative inline-flex items-center justify-center  p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-blue-500 rounded-full shadow-md group cursor-pointer"
+              >
+                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-500 group-hover:translate-x-0 ease">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                    />
+                  </svg>
+                </span>
+                <span className="absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+                  Search
+                </span>
+                <span className="relative invisible">Search</span>
+              </span>
+            </div>
           </div>
           <Link to={"/expense/new"}>
             <span>

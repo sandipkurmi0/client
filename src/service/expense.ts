@@ -71,3 +71,16 @@ export const deleteExpense = async (id:string | undefined) => {
         
     }
 }
+
+export const serchExpense = async (payload : string) => {
+    try {
+        return await axios.get(`${URL}/search/${payload}`, {
+            headers:{
+                authorization: authToken
+            }
+        })
+        
+    } catch (error) {
+        console.warn(`error while calling search expense ${error}`)
+    }
+}

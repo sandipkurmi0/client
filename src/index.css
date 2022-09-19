@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-  .active {
+  /* .active {
     color:#1f44b2;
     /* border: 2px solid #1f44b2; */
-  }
+  /* } */ */
 
+  .active{
+    background-color: red;
+    color: #fff;
+}
 
   *:hover {
     transition: all 150ms ease-in;

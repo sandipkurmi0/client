@@ -27,21 +27,21 @@ export const Login: FC = () => {
   } = useForm<Inputs>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<Inputs> = async (payload: any) => {
-    toast.success("🦄 You are Login!", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
     try {
       const response = await loginUser(payload);
       if (response?.status === 200) {
         const { token, data } = response.data;
         localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("token", JSON.stringify(token));
+        toast.success("🦄 You are Login!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
 
       navigate("/");

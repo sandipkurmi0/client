@@ -7,7 +7,7 @@ import ExpenseIndex from "./components/ExpenseIndex";
 import ExpenseEdit from "./components/ExpenseEdit";
 import ExpenseInfo from "./components/ExpenseInfo";
 import About from "./components/About";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App: FC = () => {
@@ -18,7 +18,7 @@ const App: FC = () => {
     if (!auth) {
       navigate("/login");
     }
-  }, [auth]);
+  }, [auth, navigate]);
 
   return (
     <div className="App">
